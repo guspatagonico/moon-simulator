@@ -400,7 +400,9 @@ body {
   bottom: 128px;
   left: 24px;
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
+  max-width: min(480px, calc(100vw - 48px));
   z-index: 10;
   pointer-events: auto;
 }
@@ -441,6 +443,30 @@ body {
   color: rgba(255, 255, 255, 0.7);
   cursor: pointer;
   transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.eclipse-toggle-group {
+  display: flex;
+  gap: 8px;
+  margin: 14px 0 2px;
+  flex-wrap: wrap;
+}
+
+.eclipse-toggle-btn {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.eclipse-toggle-btn.active {
+  background: rgba(108, 143, 255, 0.2);
+  border-color: rgba(108, 143, 255, 0.42);
+  color: #d8e2ff;
 }
 
 .view-btn.active {
@@ -585,6 +611,7 @@ body {
   .view-switcher {
     position: static;
     display: inline-flex;
+    flex-wrap: wrap;
     vertical-align: middle;
     margin-top: 8px;
     margin-right: 8px;
@@ -619,6 +646,16 @@ body {
     bottom: 184px;
     padding: 4px 8px;
     font-size: 0.58rem;
+  }
+
+  .eclipse-toggle-group {
+    margin-top: 10px;
+    gap: 6px;
+  }
+
+  .eclipse-toggle-btn {
+    padding: 7px 11px;
+    font-size: 0.7rem;
   }
 
   .app-title h1 {

@@ -1,4 +1,5 @@
 import { simulationStore } from '../main';
+import { enterEclipseMode, exitEclipseMode } from '../simulation/Eclipse';
 import type { SimulationState } from '../simulation/SimulationState';
 import { i18n, t } from '../i18n/i18n';
 
@@ -8,7 +9,24 @@ const VIEW_OPTIONS: Array<{ labelKey: string; value: SimulationState['viewMode']
   { labelKey: 'view.default', value: 'default' },
   { labelKey: 'view.observer', value: 'observer' },
   { labelKey: 'view.orbital', value: 'orbital' },
+  { labelKey: 'view.eclipse', value: 'eclipse' },
 ];
+
+const activateView = (viewMode: SimulationState['viewMode']): void => {
+  const state = simulationStore.get();
+
+  if (viewMode === 'eclipse') {
+    simulationStore.update(enterEclipseMode(state, state.eclipseType));
+    return;
+  }
+
+  if (state.viewMode === 'eclipse') {
+    simulationStore.update(exitEclipseMode(viewMode));
+    return;
+  }
+
+  simulationStore.update({ viewMode });
+};
 
 export function createViewSwitcher(): void {
   const element = document.getElementById('view-switcher');
@@ -64,7 +82,7 @@ export function createViewSwitcher(): void {
       });
 
       mobileSelect.addEventListener('change', () => {
-        simulationStore.update({ viewMode: mobileSelect.value as SimulationState['viewMode'] });
+        activateView(mobileSelect.value as SimulationState['viewMode']);
       });
 
       element.appendChild(mobileSelect);
@@ -78,7 +96,7 @@ export function createViewSwitcher(): void {
       button.textContent = t(labelKey);
       button.type = 'button';
       button.addEventListener('click', () => {
-        simulationStore.update({ viewMode: value });
+        activateView(value);
       });
       element.appendChild(button);
       return { button, value, labelKey };
