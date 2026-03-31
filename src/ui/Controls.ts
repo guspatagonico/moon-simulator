@@ -29,9 +29,11 @@ export function createControls(): { gui: GUI; params: ControlParams } {
     ambientIntensity: 0.15,
   };
 
-  const controls = { gui: new GUI({ title: t('settings.title') }), params };
-
   const createGui = (): GUI => {
+    document.querySelectorAll<HTMLElement>('.lil-gui.root').forEach((element) => {
+      element.remove();
+    });
+
     const gui = new GUI({ title: t('settings.title') });
 
     const simulationFolder = gui.addFolder(t('settings.simulation'));
@@ -76,8 +78,7 @@ export function createControls(): { gui: GUI; params: ControlParams } {
     return gui;
   };
 
-  controls.gui.destroy();
-  controls.gui = createGui();
+  const controls = { gui: createGui(), params };
 
   i18n.onLanguageChange(() => {
     controls.gui.destroy();

@@ -26,7 +26,7 @@ export async function createEarth(scene: THREE.Scene): Promise<THREE.Mesh> {
   }
 
   const mesh = new THREE.Mesh(geometry, material);
-  mesh.castShadow = true;
+  mesh.castShadow = false;
   mesh.receiveShadow = false;
   mesh.rotation.z = THREE.MathUtils.degToRad(23.4);
 
