@@ -184,4 +184,6 @@ If you contribute, please prefer:
 
 ## License
 
-Add the license of your choice before public distribution if you want to define reuse terms explicitly.
+This project is licensed under the **MIT License**.
+
+See [LICENSE](./LICENSE) for details.
