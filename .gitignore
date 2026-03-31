@@ -47,6 +47,9 @@ tmp/
 Thumbs.db
 .idea/
 .vscode/
+handoff.md
+opencode.jsonc
+opencode.json 
 
 # Optional local databases
 *.sqlite
