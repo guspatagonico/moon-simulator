@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Moon Phases Simulator</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%23f6e4a6'/%3E%3Cpath d='M40 10c8 5 14 14 14 22S48 49 40 54c10 0 18-10 18-22S50 10 40 10Z' fill='%23c8b47a'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="/src/styles/main.css" />
+  </head>
+  <body>
+    <div id="loading-screen" aria-live="polite">
+      <div class="spinner"></div>
+      <p>Loading Moon Phases Simulator...</p>
+    </div>
+
+    <canvas id="scene-canvas" aria-label="Interactive 3D moon phases visualization"></canvas>
+
+    <div class="app-title">
+      <h1>Moon Phases</h1>
+      <p>An Interactive Simulator</p>
+      <div id="language-switcher" class="language-switcher"></div>
+    </div>
+
+    <div id="info-panel" class="glass-panel info-panel" role="region" aria-label="Moon phase information"></div>
+
+    <div id="timeline-bar" class="glass-panel timeline-bar" role="region" aria-label="Timeline controls"></div>
+
+    <div id="view-switcher" class="view-switcher" role="toolbar" aria-label="View mode selector"></div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
