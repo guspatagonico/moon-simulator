@@ -1,8 +1,11 @@
+import type { EclipseType } from './Eclipse';
+
 export interface SimulationState {
   currentDay: number;
   isPlaying: boolean;
   playSpeed: number;
-  viewMode: 'default' | 'observer' | 'orbital';
+  viewMode: 'default' | 'observer' | 'orbital' | 'eclipse';
+  eclipseType: EclipseType;
   showOrbitLine: boolean;
   showLabels: boolean;
   realisticScale: boolean;
@@ -14,6 +17,7 @@ export function createDefaultState(): SimulationState {
     isPlaying: true,
     playSpeed: 1,
     viewMode: 'default',
+    eclipseType: 'solar',
     showOrbitLine: true,
     showLabels: true,
     realisticScale: false,
@@ -38,7 +42,9 @@ export class SimulationStore {
   update(partial: Partial<SimulationState>): void {
     this.state = { ...this.state, ...partial };
     const snapshot = this.get();
-    this.listeners.forEach((listener) => listener(snapshot));
+    this.listeners.forEach((listener) => {
+      listener(snapshot);
+    });
   }
 
   subscribe(cb: StateChangeCallback): () => void {

@@ -1,16 +1,22 @@
 import * as THREE from 'three';
 import { dayToPhaseAngle, getPhaseInfo, type PhaseInfo } from './MoonPhase';
+import { ECLIPSE_ORBIT_INCLINATION_DEG } from './Eclipse';
 
 const READABLE_ORBIT_RADIUS = 10;
 const REALISTIC_ORBIT_RADIUS = 60;
 
-const buildOrbitGeometry = (radius: number): THREE.BufferGeometry => {
+const buildOrbitGeometry = (radius: number, inclinationDeg: number): THREE.BufferGeometry => {
   const points: THREE.Vector3[] = [];
   const segments = 128;
+  const inclinationRad = THREE.MathUtils.degToRad(inclinationDeg);
 
   for (let i = 0; i <= segments; i += 1) {
     const t = (i / segments) * Math.PI * 2;
-    points.push(new THREE.Vector3(Math.cos(t) * radius, 0, Math.sin(t) * radius));
+    const x = Math.cos(t) * radius;
+    const baseZ = Math.sin(t) * radius;
+    const y = -baseZ * Math.sin(inclinationRad);
+    const z = baseZ * Math.cos(inclinationRad);
+    points.push(new THREE.Vector3(x, y, z));
   }
 
   return new THREE.BufferGeometry().setFromPoints(points);
@@ -21,6 +27,7 @@ export interface OrbitalSystem {
   orbitLine: THREE.Line;
   setDay: (day: number) => PhaseInfo;
   setRealisticScale: (realistic: boolean) => void;
+  setEclipseTilt: (enabled: boolean) => void;
 }
 
 export function createOrbitalSystem(moon: THREE.Mesh): OrbitalSystem {
@@ -34,13 +41,31 @@ export function createOrbitalSystem(moon: THREE.Mesh): OrbitalSystem {
   });
 
   let currentRadius = READABLE_ORBIT_RADIUS;
-  const orbitLine = new THREE.Line(buildOrbitGeometry(currentRadius), orbitMaterial);
+  let currentInclination = 0;
+  let currentDay = 0;
+  const orbitLine = new THREE.Line(buildOrbitGeometry(currentRadius, currentInclination), orbitMaterial);
   moon.position.set(currentRadius, 0, 0);
   pivot.add(moon);
 
+  const syncMoonPosition = (): void => {
+    const phaseAngle = THREE.MathUtils.degToRad(dayToPhaseAngle(currentDay));
+    const inclinationRad = THREE.MathUtils.degToRad(currentInclination);
+    const x = Math.cos(-phaseAngle) * currentRadius;
+    const baseZ = Math.sin(-phaseAngle) * currentRadius;
+    const y = -baseZ * Math.sin(inclinationRad);
+    const z = baseZ * Math.cos(inclinationRad);
+    moon.position.set(x, y, z);
+  };
+
+  const syncOrbitGeometry = (): void => {
+    const previousGeometry = orbitLine.geometry;
+    orbitLine.geometry = buildOrbitGeometry(currentRadius, currentInclination);
+    previousGeometry.dispose();
+  };
+
   const setDay = (day: number): PhaseInfo => {
-    const phaseAngle = dayToPhaseAngle(day);
-    pivot.rotation.y = -THREE.MathUtils.degToRad(phaseAngle);
+    currentDay = day;
+    syncMoonPosition();
     return getPhaseInfo(day);
   };
 
@@ -51,11 +76,20 @@ export function createOrbitalSystem(moon: THREE.Mesh): OrbitalSystem {
     }
 
     currentRadius = nextRadius;
-    moon.position.set(currentRadius, 0, 0);
-    const previousGeometry = orbitLine.geometry;
-    orbitLine.geometry = buildOrbitGeometry(currentRadius);
-    previousGeometry.dispose();
+    syncMoonPosition();
+    syncOrbitGeometry();
   };
 
-  return { pivot, orbitLine, setDay, setRealisticScale };
+  const setEclipseTilt = (enabled: boolean): void => {
+    const nextInclination = enabled ? ECLIPSE_ORBIT_INCLINATION_DEG : 0;
+    if (Math.abs(nextInclination - currentInclination) < 0.001) {
+      return;
+    }
+
+    currentInclination = nextInclination;
+    syncMoonPosition();
+    syncOrbitGeometry();
+  };
+
+  return { pivot, orbitLine, setDay, setRealisticScale, setEclipseTilt };
 }
