@@ -4,9 +4,11 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { createEarth, updateEarth } from './scene/Earth';
+import { createEclipseGuides } from './scene/EclipseGuides';
 import { createMoon } from './scene/Moon';
 import { createStarfield } from './scene/Stars';
 import { createSun } from './scene/Sun';
+import { getEclipseInfo, isWithinEclipseWindow } from './simulation/Eclipse';
 import { SYNODIC_PERIOD } from './simulation/MoonPhase';
 import { createOrbitalSystem } from './simulation/OrbitalSystem';
 import { SimulationStore, createDefaultState } from './simulation/SimulationState';
@@ -30,6 +32,8 @@ scene.background = new THREE.Color(0x02050c);
 
 const DEFAULT_CAMERA_POSITION = new THREE.Vector3(0, 8, 25);
 const ORBITAL_CAMERA_POSITION = new THREE.Vector3(0, 40, 0.01);
+const SOLAR_ECLIPSE_CAMERA_POSITION = new THREE.Vector3(-8.5, 4.8, 17);
+const LUNAR_ECLIPSE_CAMERA_POSITION = new THREE.Vector3(13.5, 5.2, 18);
 const ORIGIN = new THREE.Vector3(0, 0, 0);
 
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -41,6 +45,7 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
@@ -117,6 +122,7 @@ const init = async (): Promise<void> => {
   const [earth, moon] = await Promise.all([createEarth(scene), createMoon(scene)]);
 
   const sun = createSun(scene);
+  const eclipseGuides = createEclipseGuides(scene);
   const orbitalSystem = createOrbitalSystem(moon);
   scene.add(orbitalSystem.pivot);
   scene.add(orbitalSystem.orbitLine);
@@ -125,6 +131,7 @@ const init = async (): Promise<void> => {
     const state = simulationStore.get();
     orbitalSystem.orbitLine.visible = state.showOrbitLine;
     orbitalSystem.setRealisticScale(state.realisticScale);
+    orbitalSystem.setEclipseTilt(state.viewMode === 'eclipse');
   };
 
   simulationStore.subscribe(() => {
@@ -148,6 +155,8 @@ const init = async (): Promise<void> => {
   const moonWorldPos = new THREE.Vector3();
   const observerDirection = new THREE.Vector3();
   const observerPosition = new THREE.Vector3();
+  const eclipseCameraTarget = new THREE.Vector3();
+  const eclipseCameraPosition = new THREE.Vector3();
   let previousViewMode = simulationStore.get().viewMode;
   let returningToDefault = false;
 
@@ -173,6 +182,18 @@ const init = async (): Promise<void> => {
     sun.ambient.intensity = controlsState.params.ambientIntensity;
 
     moon.getWorldPosition(moonWorldPos);
+    const eclipseInfo = getEclipseInfo(currentState.currentDay, currentState.eclipseType);
+    const eclipseShadowActive = currentState.viewMode === 'eclipse' && isWithinEclipseWindow(eclipseInfo.alignmentWindowPercent);
+    earth.castShadow = eclipseShadowActive && currentState.eclipseType === 'lunar';
+    earth.receiveShadow = eclipseShadowActive && currentState.eclipseType === 'solar';
+    moon.castShadow = eclipseShadowActive && currentState.eclipseType === 'solar';
+    moon.receiveShadow = eclipseShadowActive && currentState.eclipseType === 'lunar';
+    eclipseGuides.update(
+      currentState.viewMode === 'eclipse',
+      currentState.eclipseType,
+      moonWorldPos,
+      eclipseInfo.alignmentWindowPercent,
+    );
 
     if (currentState.viewMode === 'observer') {
       controls.enabled = false;
@@ -189,6 +210,19 @@ const init = async (): Promise<void> => {
       camera.position.copy(ORBITAL_CAMERA_POSITION);
       controls.target.copy(ORIGIN);
       camera.lookAt(ORIGIN);
+    } else if (currentState.viewMode === 'eclipse') {
+      controls.enabled = false;
+      setCameraFov(42);
+      if (currentState.eclipseType === 'solar') {
+        eclipseCameraPosition.copy(SOLAR_ECLIPSE_CAMERA_POSITION);
+        eclipseCameraTarget.copy(moonWorldPos).lerp(ORIGIN, 0.68);
+      } else {
+        eclipseCameraPosition.copy(LUNAR_ECLIPSE_CAMERA_POSITION);
+        eclipseCameraTarget.copy(moonWorldPos).lerp(ORIGIN, 0.35);
+      }
+      camera.position.lerp(eclipseCameraPosition, 0.08);
+      controls.target.lerp(eclipseCameraTarget, 0.12);
+      camera.lookAt(controls.target);
     } else {
       setCameraFov(60);
       controls.enabled = true;
