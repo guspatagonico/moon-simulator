@@ -1,3 +1,6 @@
+/**
+ * Moon Phases Simulator bootstrap by Gustavo Adrián Salvini <guspatagonico@gmail.com>
+ */
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { createEarth, updateEarth } from './scene/Earth';
