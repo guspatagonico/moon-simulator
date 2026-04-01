@@ -69,7 +69,7 @@ const setCameraFov = (nextFov: number): void => {
 
 const getObserverFov = (distanceToMoon: number): number => {
   const angularDiameter = 2 * Math.atan(0.55 / Math.max(distanceToMoon, 0.001));
-  return THREE.MathUtils.clamp(THREE.MathUtils.radToDeg(angularDiameter / 0.28), 5, 28);
+  return THREE.MathUtils.clamp(THREE.MathUtils.radToDeg(angularDiameter / 0.45), 5, 22);
 };
 
 const hideLoadingScreen = (): void => {
@@ -200,8 +200,8 @@ const init = async (): Promise<void> => {
     if (currentState.viewMode === 'observer') {
       controls.enabled = false;
       observerDirection.copy(moonWorldPos).normalize();
-      observerPosition.copy(observerDirection).multiplyScalar(2.45);
-      observerPosition.y += 0.45;
+      observerPosition.copy(observerDirection).multiplyScalar(4.0);
+      observerPosition.y += 0.6;
       camera.position.copy(observerPosition);
       setCameraFov(getObserverFov(camera.position.distanceTo(moonWorldPos)));
       controls.target.copy(moonWorldPos);
