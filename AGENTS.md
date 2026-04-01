@@ -143,6 +143,7 @@ src/
 ## Project-Specific Persistent Instructions
 
 - Non-negotiable: never include agent names in commit messages, co-author trailers, pull request text, generated documentation, or any other repo-written content.
+- Do not remove or modify the `server` block in `vite.config.ts` (`host: '0.0.0.0'`, `allowedHosts: ['galadriel']`) -- this is a local dev convenience for LAN access and must be preserved.
 
 ## Common Pitfalls
 

@@ -11,6 +11,7 @@ import { createSun } from './scene/Sun';
 import { getEclipseInfo, isWithinEclipseWindow } from './simulation/Eclipse';
 import { SYNODIC_PERIOD } from './simulation/MoonPhase';
 import { createOrbitalSystem } from './simulation/OrbitalSystem';
+import type { SimulationState } from './simulation/SimulationState';
 import { SimulationStore, createDefaultState } from './simulation/SimulationState';
 import { createInfoPanel } from './ui/InfoPanel';
 import { createTimeline } from './ui/Timeline';
@@ -20,7 +21,23 @@ import { createLanguageSwitcher } from './ui/LanguageSwitcher';
 import { createEclipseObserver } from './ui/EclipseObserver';
 import { i18n, t } from './i18n/i18n';
 
-export const simulationStore = new SimulationStore(createDefaultState());
+const VIEW_MODE_STORAGE_KEY = 'moon-sim:viewMode';
+const PERSISTABLE_VIEW_MODES: readonly string[] = ['default', 'observer', 'orbital'];
+
+const getSavedViewMode = (): SimulationState['viewMode'] => {
+  try {
+    const saved = localStorage.getItem(VIEW_MODE_STORAGE_KEY);
+    if (saved && PERSISTABLE_VIEW_MODES.includes(saved)) {
+      return saved as SimulationState['viewMode'];
+    }
+  } catch { }
+  return 'default';
+};
+
+export const simulationStore = new SimulationStore({
+  ...createDefaultState(),
+  viewMode: getSavedViewMode(),
+});
 
 const canvas = document.getElementById('scene-canvas');
 
@@ -138,6 +155,16 @@ const init = async (): Promise<void> => {
 
   simulationStore.subscribe(() => {
     applyState();
+  });
+
+  let lastSavedViewMode = '';
+  simulationStore.subscribe((state) => {
+    if (state.viewMode !== lastSavedViewMode) {
+      lastSavedViewMode = state.viewMode;
+      try {
+        localStorage.setItem(VIEW_MODE_STORAGE_KEY, state.viewMode);
+      } catch { }
+    }
   });
 
   applyState();

@@ -1,237 +1,123 @@
 # 🌙 Moon Phases Simulator
 
-An interactive **3D web simulator of the Moon's phases** built for education.
+An interactive **3D simulator of the Moon's phases and eclipses**, built for education.
 
-This project helps learners understand **why the Moon changes appearance during the lunar month** and how **solar and lunar eclipses** emerge from rare alignments by visualizing the Sun, Earth, Moon, orbital position, phase angle, and illumination state in real time.
+Explore the Sun–Earth–Moon system in real time: watch the Moon orbit, understand why its appearance changes throughout the lunar month, and discover how solar and lunar eclipses emerge from rare alignments — all from four different camera perspectives.
 
-It is designed to be visually clear, mobile-friendly, and accessible to a multilingual audience.
+Designed to be visually clear, mobile-friendly, and accessible in English, Spanish, and Italian.
 
-## Highlights
+## What You Can Do
 
-- **Interactive 3D scene** powered by Three.js
-- **Educational phase model** based on the synodic month (`29.53059` days)
-- **Four camera views**:
-  - **Default** — balanced overview of the system
-  - **Observer** — Moon-focused view from Earth's perspective
-  - **Orbital** — top-down orbital view for geometry understanding
-  - **Eclipse** — a dedicated teaching view for solar and lunar eclipses
-- **Multilingual UI** with built-in support for:
-  - English
-  - Spanish
-  - Italian
-- **Dedicated eclipse learning mode** with:
-  - solar / lunar eclipse toggle
-  - a tilted lunar orbit to show why eclipses are rare
-  - eclipse lineup readouts and alignment-window feedback
-  - sunlight-driven shadow casting from Moon to Earth and Earth to Moon when the eclipse window is active
-  - guide lines that make the Sun-Earth-Moon geometry easier to follow
-  - an **"As seen from Earth" observation inset** showing the classic eclipse appearance: solar corona during a solar eclipse and the blood-red Moon during a lunar eclipse
-- **Touch-friendly mobile layout** with:
-  - compact mobile POV selector
-  - collapsible info drawer
-  - larger timeline controls and step buttons
-- **Educational overlays** showing:
-  - phase name
-  - illumination percentage
-  - lunar day
-  - phase angle
-  - explanations and common misconceptions
-- **Adjustable simulation controls** through a compact settings panel
+### 🌓 Explore Lunar Phases
 
-## Educational Focus
+The simulator models a complete **synodic month** (29.53 days). As the Moon orbits Earth, an information panel shows you:
 
-This simulator is designed to explain both the **geometry of lunar phases** and the rarer **geometry of eclipses**, while keeping those two topics clearly separated.
+- The current **phase name** (🌑 New Moon → 🌒 Waxing Crescent → 🌓 First Quarter → 🌔 Waxing Gibbous → 🌕 Full Moon → 🌖 Waning Gibbous → 🌗 Last Quarter → 🌘 Waning Crescent)
+- **Illumination** percentage
+- **Lunar day** and **phase angle**
+- A concise **explanation** of why the Moon looks the way it does at each phase
+- **Common misconception** notes — such as the widespread but incorrect belief that phases are caused by Earth's shadow
 
-### Important modeling choice
+### 🔭 Four Camera Views
 
-In the normal phase views, **Earth's shadow is not projected onto the Moon**.
+Switch perspectives to understand the geometry from different angles:
 
-That is deliberate: normal moon phases are **not** caused by Earth's shadow. Shadow projection is only enabled inside the dedicated **Eclipse** mode, where the simulator can safely teach the distinct geometry of:
+| View | What it shows |
+|------|---------------|
+| **Default** | Balanced overview of the entire Sun–Earth–Moon system |
+| **Observer** | Moon-focused view from Earth's perspective — the Moon is the visual hero |
+| **Orbital** | Top-down view for understanding the orbital geometry |
+| **Eclipse** | Dedicated teaching mode for solar and lunar eclipses |
 
-- **solar eclipses** — the Moon casting a sunlight shadow toward Earth
-- **lunar eclipses** — Earth casting a sunlight shadow onto the Moon
+### 🌑 Eclipse Learning Mode
 
-## Why this simulator is useful
+A focused teaching view that separates eclipse geometry from everyday lunar phases.
 
-Many Moon phase visualizations show the orbit but fail to make the Moon readable from the observer's point of view, or they blur together phases and eclipses. This project specifically improves that experience by:
+**Why this matters:** Normal moon phases are _not_ caused by Earth's shadow. The simulator deliberately disables shadow projection outside of Eclipse mode so learners don't confuse the two phenomena.
 
-- making the **Moon the visual hero** in Observer view
-- using a proper **spherical Moon texture** instead of a baked full-moon photo
-- explaining each phase with concise educational text
-- exposing the relationship between **day, angle, and illumination**
-- separating the **phase model** from the **eclipse teaching mode** so learners do not confuse them
+In Eclipse mode you can:
 
-## Tech Stack
+- Toggle between **solar** and **lunar** eclipse scenarios
+- See a **tilted lunar orbit** (5.1°) that explains why eclipses are rare
+- Track the **alignment window** percentage as the Sun, Earth, and Moon line up
+- Watch **shadow casting** activate when the alignment reaches the 70%+ threshold
+- Follow **guide lines** that make the Sun–Earth–Moon geometry easier to read
 
-- **Vite**
-- **TypeScript**
-- **Three.js**
-- **lil-gui**
+#### "As Seen from Earth" Inset
+
+A circular observation panel appears in the corner, showing what an observer on Earth would actually see:
+
+- **Solar eclipse** — the Moon's dark silhouette slides across the Sun. Near totality, an animated **solar corona** with wispy radial streamers becomes visible, the sky darkens, and stars fade in.
+- **Lunar eclipse** — the Moon gradually darkens and shifts to a deep **copper-red blood moon**, with a subtle reddish glow at peak alignment.
+
+### ⏱ Timeline Controls
+
+- **Play / Pause** the simulation (or press **Space**)
+- Choose from **5 speed presets**: 0.25×, 0.5×, 1×, 2×, 4×
+- **Scrub** through the lunar month with a slider marked at key phase positions
+- **Step** backward or forward by half a day (or press **← →** arrow keys)
+
+### ⚙️ Settings
+
+A compact settings panel lets you fine-tune:
+
+- Current day and playback speed
+- Orbit line visibility
+- Realistic vs. exaggerated scale
+- Camera auto-rotation and rotation speed
+- Sun and ambient lighting intensity
+
+When entering Eclipse mode, the simulator automatically adjusts to a clearer teaching setup: slower playback, orbit line visible, and readable non-realistic scale.
+
+### 🌍 Three Languages
+
+All interface text, phase names, eclipse content, educational descriptions, and accessibility labels are fully translated in:
+
+- **English**
+- **Spanish**
+- **Italian**
+
+### 📱 Mobile-Friendly
+
+The app adapts to smaller screens with:
+
+- A compact control cluster at the top
+- A native dropdown for view switching
+- A collapsible info panel drawer
+- Touch-friendly timeline controls
+- Responsive eclipse inset sizing
+
+### 💾 Remembers Your Preferences
+
+Your last selected **language** and **view mode** are saved automatically and restored on your next visit.
 
 ## Getting Started
 
-### 1. Install dependencies
-
 ```bash
-npm install
+npm install       # Install dependencies
+npm run dev       # Start the dev server
+npm run build     # Production build
+npm run preview   # Preview the production build
 ```
 
-### 2. Start the development server
+The app is configured to deploy under the `/moon-simulator/` base path.
 
-```bash
-npm run dev
-```
-
-### 3. Build for production
-
-```bash
-npm run build
-```
-
-This app is configured to deploy under the `/moon-simulator/` base path.
-
-### 4. Preview the production build
-
-```bash
-npm run preview
-```
-
-## Controls
-
-### Timeline
-
-- Play / pause the simulation
-- Change simulation speed
-- Scrub through the lunar month
-- Step backward or forward through the cycle
-
-### View Modes
-
-- **Default** — standard orbit view
-- **Observer** — Earth-based Moon view with Moon-centered framing
-- **Orbital** — top-down geometry view
-- **Eclipse** — dedicated solar/lunar eclipse learning mode with specialized framing
-
-### Eclipse Mode
-
-The eclipse mode is a focused teaching view rather than a general free-roam camera.
-
-It lets you:
-
-- switch between **solar** and **lunar** eclipse scenarios
-- start from a clear eclipse-aligned setup instead of a random day in the cycle
-- see the **alignment window** percentage used by the educational model
-- see when the **70%+ shadow zone** is active
-- follow the tilted orbit and guide lines as the bodies move through the eclipse setup
-- observe sunlight-driven shadow casting during the active eclipse window
-
-#### Earth Observer Inset
-
-While in Eclipse mode, a circular inset panel labeled **"As seen from Earth"** appears in the corner. It renders what an observer on Earth would actually see during the eclipse:
-
-- **Solar eclipse**: the Moon's dark silhouette slides across the Sun as the alignment window increases. Near totality (~75%+ alignment), a wispy solar corona with animated radial streamers becomes visible around the Moon's edge, the sky darkens, and stars fade in.
-- **Lunar eclipse**: the Moon gradually darkens and shifts to a deep copper-red blood moon as the alignment window rises, with a subtle reddish glow at peak alignment.
-
-The inset uses its own lightweight Three.js scene with an orthographic camera and correctly proportioned discs, independent of the main 3D view's simulation scale.
-
-### Information Panel
-
-The info panel updates live with:
-
-- current phase
-- illumination
-- lunar day
-- phase angle
-- educational explanation
-- misconception note when relevant
-
-In Eclipse mode, the panel switches to eclipse-specific teaching content:
-
-- solar / lunar eclipse selector
-- alignment window percentage
-- shadow zone threshold hint
-- lineup explanation
-- orbit tilt reminder
-- mode-specific educational explanation
-
-### Settings
-
-The settings panel lets you adjust:
-
-- current day
-- playback speed
-- orbit line visibility
-- realistic scale mode
-- camera auto-rotation
-- lighting values
-
-When Eclipse mode is entered, the app temporarily switches into a clearer teaching setup: slower playback, orbit line on, and readable non-realistic scale.
-
-## Mobile UX
-
-The app has been specifically polished for smaller screens.
-
-Notable mobile adaptations include:
-
-- a compact top control cluster
-- a native select for point-of-view switching
-- a collapsible info panel drawer
-- larger timeline touch targets
-- a collapsed settings panel by default
-
-## Languages
-
-The interface currently supports:
-
-- **English** (`en`)
-- **Spanish** (`es`)
-- **Italian** (`it`)
-
-Translations cover static UI text, ARIA labels, phase names, eclipse learning content, descriptions, and settings labels.
-
-## Project Structure
-
-```text
-src/
-  i18n/          # locale dictionaries and translation wiring
-  scene/         # Earth, Moon, Sun, stars, eclipse guides, corona shader
-  simulation/    # phase math, eclipse state, and orbital system
-  styles/        # app styling and responsive layout
-  ui/            # controls, timeline, info panel, eclipse observer, language/view switchers
-  main.ts        # app bootstrap, renderer, camera behavior
-```
-
-## Verification
-
-This project is set up to validate cleanly with:
-
-```bash
-tsc --noEmit
-npm run build
-```
+Built with [Three.js](https://threejs.org/), TypeScript, and [Vite](https://vitejs.dev/).
 
 ## Roadmap
 
-Potential next steps:
-
-- stronger accessibility refinements
-- richer educational overlays
-- diamond ring effect and Baily's beads for the solar eclipse observation inset
-- screenshots / animated previews in the README
-- deployment as a public demo
+- Stronger accessibility refinements
+- Richer educational overlays
+- Diamond ring effect and Baily's beads for the solar eclipse observation inset
+- Screenshots and animated previews in this README
+- Deployment as a public demo
 
 ## Contributing
 
 Issues, ideas, and educational improvements are welcome.
 
-If you contribute, please prefer:
-
-- small focused pull requests
-- clear educational intent
-- conventional commit messages
+Please prefer small, focused pull requests with clear educational intent and conventional commit messages.
 
 ## License
 
-This project is licensed under the **MIT License**.
-
-See [LICENSE](./LICENSE) for details.
+This project is licensed under the **MIT License**. See [LICENSE](./LICENSE) for details.

@@ -9,4 +9,8 @@ export default defineConfig({
   optimizeDeps: {
     include: ['three', 'lil-gui'],
   },
+  server: {
+    host: '0.0.0.0',
+    allowedHosts: ['galadriel'],
+  },
 });

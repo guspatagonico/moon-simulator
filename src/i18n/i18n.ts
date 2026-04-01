@@ -6,8 +6,21 @@ export type Locale = 'en' | 'es' | 'it';
 type TranslationDict = Record<string, string>;
 type LanguageChangeCallback = (locale: Locale) => void;
 
+const LOCALE_STORAGE_KEY = 'moon-sim:locale';
+const VALID_LOCALES: readonly string[] = ['en', 'es', 'it'];
+
+const getSavedLocale = (): Locale => {
+  try {
+    const saved = localStorage.getItem(LOCALE_STORAGE_KEY);
+    if (saved && VALID_LOCALES.includes(saved)) {
+      return saved as Locale;
+    }
+  } catch { }
+  return 'en';
+};
+
 class I18n {
-  private locale: Locale = 'en';
+  private locale: Locale = getSavedLocale();
   private dictionaries: Record<Locale, TranslationDict> = { en, es, it };
   private listeners: LanguageChangeCallback[] = [];
 
@@ -24,6 +37,9 @@ class I18n {
       return;
     }
     this.locale = next;
+    try {
+      localStorage.setItem(LOCALE_STORAGE_KEY, next);
+    } catch { }
     this.listeners.forEach((cb) => cb(next));
   }
 
