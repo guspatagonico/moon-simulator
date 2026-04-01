@@ -140,6 +140,10 @@ src/
 - Clear educational intent
 - Conventional commit messages
 
+## Project-Specific Persistent Instructions
+
+- Non-negotiable: never include agent names in commit messages, co-author trailers, pull request text, generated documentation, or any other repo-written content.
+
 ## Common Pitfalls
 
 - `simulationStore` is exported from `main.ts` -- importing it creates a module dependency on the bootstrap file

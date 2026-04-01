@@ -25,6 +25,7 @@ It is designed to be visually clear, mobile-friendly, and accessible to a multil
   - eclipse lineup readouts and alignment-window feedback
   - sunlight-driven shadow casting from Moon to Earth and Earth to Moon when the eclipse window is active
   - guide lines that make the Sun-Earth-Moon geometry easier to follow
+  - an **"As seen from Earth" observation inset** showing the classic eclipse appearance: solar corona during a solar eclipse and the blood-red Moon during a lunar eclipse
 - **Touch-friendly mobile layout** with:
   - compact mobile POV selector
   - collapsible info drawer
@@ -124,6 +125,15 @@ It lets you:
 - follow the tilted orbit and guide lines as the bodies move through the eclipse setup
 - observe sunlight-driven shadow casting during the active eclipse window
 
+#### Earth Observer Inset
+
+While in Eclipse mode, a circular inset panel labeled **"As seen from Earth"** appears in the corner. It renders what an observer on Earth would actually see during the eclipse:
+
+- **Solar eclipse**: the Moon's dark silhouette slides across the Sun as the alignment window increases. Near totality (~75%+ alignment), a wispy solar corona with animated radial streamers becomes visible around the Moon's edge, the sky darkens, and stars fade in.
+- **Lunar eclipse**: the Moon gradually darkens and shifts to a deep copper-red blood moon as the alignment window rises, with a subtle reddish glow at peak alignment.
+
+The inset uses its own lightweight Three.js scene with an orthographic camera and correctly proportioned discs, independent of the main 3D view's simulation scale.
+
 ### Information Panel
 
 The info panel updates live with:
@@ -184,10 +194,10 @@ Translations cover static UI text, ARIA labels, phase names, eclipse learning co
 ```text
 src/
   i18n/          # locale dictionaries and translation wiring
-  scene/         # Earth, Moon, Sun, stars, eclipse guides
+  scene/         # Earth, Moon, Sun, stars, eclipse guides, corona shader
   simulation/    # phase math, eclipse state, and orbital system
   styles/        # app styling and responsive layout
-  ui/            # controls, timeline, info panel, language/view switchers
+  ui/            # controls, timeline, info panel, eclipse observer, language/view switchers
   main.ts        # app bootstrap, renderer, camera behavior
 ```
 
@@ -206,7 +216,7 @@ Potential next steps:
 
 - stronger accessibility refinements
 - richer educational overlays
-- more advanced eclipse metrics or visual overlays
+- diamond ring effect and Baily's beads for the solar eclipse observation inset
 - screenshots / animated previews in the README
 - deployment as a public demo
 

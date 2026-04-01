@@ -53,6 +53,7 @@ export const en: Record<string, string> = {
   'eclipse.lunar.name': 'Lunar Eclipse View',
   'eclipse.lunar.short': 'Lunar',
   'eclipse.lunar.lineup': 'Earth between Sun and Moon',
+  'eclipse.observer.label': 'As seen from Earth',
   'eclipse.lunar.description': 'This special view centers the system near Full Moon and reveals how Earth can shadow the Moon only when the orbit crosses the node line at the right time. The slight orbital tilt makes it clear why most Full Moons do not become lunar eclipses.',
   'phase.newMoon.name': 'New Moon',
   'phase.newMoon.description':

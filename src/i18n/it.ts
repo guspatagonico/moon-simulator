@@ -52,6 +52,7 @@ export const it: Record<string, string> = {
   'eclipse.solar.description': 'Questa vista speciale blocca il sistema vicino alla Luna Nuova e inclina l’orbita lunare per mostrare perché un’eclissi solare richiede sia allineamento sia passaggio sulla linea dei nodi. Guarda la Luna passare davanti alla direzione del Sole e proiettare una sottile ombra verso la Terra.',
   'eclipse.lunar.name': 'Vista eclissi lunare',
   'eclipse.lunar.short': 'Lunare',
+  'eclipse.observer.label': 'Visto dalla Terra',
   'eclipse.lunar.lineup': 'Terra tra Sole e Luna',
   'eclipse.lunar.description': 'Questa vista speciale centra il sistema vicino alla Luna Piena e mostra come la Terra possa oscurare la Luna solo quando l’orbita attraversa la linea dei nodi al momento giusto. La lieve inclinazione orbitale chiarisce perché la maggior parte delle Lune Piene non diventa un’eclissi lunare.',
   'phase.newMoon.name': 'Luna Nuova',

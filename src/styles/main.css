@@ -675,6 +675,62 @@ body {
   }
 }
 
+.eclipse-observer {
+  position: fixed;
+  bottom: 140px;
+  right: 20px;
+  width: 220px;
+  padding: 10px 10px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  opacity: 0;
+  transform: scale(0.92);
+  pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.eclipse-observer.visible {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+.eclipse-observer-label {
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.eclipse-observer-canvas {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .eclipse-observer {
+    top: 16px;
+    right: 16px;
+    bottom: auto;
+    width: 140px;
+    padding: 6px 6px 8px;
+    gap: 4px;
+  }
+
+  .eclipse-observer-label {
+    font-size: 0.58rem;
+  }
+
+  .eclipse-observer-canvas {
+    width: 120px;
+    height: 120px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

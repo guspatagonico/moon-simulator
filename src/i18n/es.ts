@@ -53,6 +53,7 @@ export const es: Record<string, string> = {
   'eclipse.lunar.name': 'Vista de eclipse lunar',
   'eclipse.lunar.short': 'Lunar',
   'eclipse.lunar.lineup': 'La Tierra entre el Sol y la Luna',
+  'eclipse.observer.label': 'Visto desde la Tierra',
   'eclipse.lunar.description': 'Esta vista especial centra el sistema cerca de la Luna Llena y muestra cómo la Tierra puede sombrear la Luna solo cuando la órbita cruza la línea de nodos en el momento adecuado. La leve inclinación orbital deja claro por qué la mayoría de las Lunas Llenas no se convierten en eclipses lunares.',
   'phase.newMoon.name': 'Luna Nueva',
   'phase.newMoon.description':

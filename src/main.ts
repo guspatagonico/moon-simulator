@@ -17,6 +17,7 @@ import { createTimeline } from './ui/Timeline';
 import { createControls } from './ui/Controls';
 import { createViewSwitcher } from './ui/ViewSwitcher';
 import { createLanguageSwitcher } from './ui/LanguageSwitcher';
+import { createEclipseObserver } from './ui/EclipseObserver';
 import { i18n, t } from './i18n/i18n';
 
 export const simulationStore = new SimulationStore(createDefaultState());
@@ -146,6 +147,7 @@ const init = async (): Promise<void> => {
   const controlsState = createControls();
   createViewSwitcher();
   createLanguageSwitcher();
+  createEclipseObserver();
   syncStaticText();
 
   i18n.onLanguageChange(() => {
