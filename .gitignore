@@ -47,7 +47,7 @@ tmp/
 Thumbs.db
 .idea/
 .vscode/
-handoff.md
+handoff*.md
 opencode.jsonc
 opencode.json 
 
