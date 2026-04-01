@@ -487,6 +487,15 @@ body {
 }
 
 @media (max-width: 768px) {
+  #scene-canvas {
+    transform: translateY(-10%);
+  }
+
+  .lil-gui.root {
+    margin-right: 8px;
+    max-width: calc(100vw - 16px);
+  }
+
   .info-panel {
     width: calc(100% - 32px);
     left: 16px;
@@ -678,7 +687,7 @@ body {
 
 .eclipse-observer {
   position: fixed;
-  bottom: 140px;
+  bottom: 164px;
   right: 20px;
   width: 220px;
   padding: 10px 10px 12px;
@@ -714,21 +723,23 @@ body {
 
 @media (max-width: 768px) {
   .eclipse-observer {
-    top: 16px;
-    right: 16px;
+    top: 52px;
+    right: 12px;
+    left: auto;
     bottom: auto;
-    width: 140px;
-    padding: 6px 6px 8px;
-    gap: 4px;
+    width: 108px;
+    padding: 3px;
+    gap: 0;
+    border-radius: 10px;
   }
 
   .eclipse-observer-label {
-    font-size: 0.58rem;
+    display: none;
   }
 
   .eclipse-observer-canvas {
-    width: 120px;
-    height: 120px;
+    width: 100px;
+    height: 100px;
   }
 }
 

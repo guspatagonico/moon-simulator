@@ -50,7 +50,7 @@ export class EclipseObserver {
     document.body.appendChild(this.container);
 
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
-    this.renderer.setSize(OBSERVER_SIZE, OBSERVER_SIZE);
+    this.renderer.setSize(OBSERVER_SIZE, OBSERVER_SIZE, false);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
 
@@ -194,7 +194,7 @@ export class EclipseObserver {
     this.lunarGlowDisc.visible = !isSolar;
 
     if (isSolar) {
-      this.renderSolarEclipse(alignment, elapsed);
+      this.renderSolarEclipse(alignment, elapsed, eclipseInfo.offsetDays);
     } else {
       this.renderLunarEclipse(alignment);
     }
@@ -202,11 +202,12 @@ export class EclipseObserver {
     this.renderer.render(this.scene, this.camera);
   }
 
-  private renderSolarEclipse(alignment: number, elapsed: number): void {
+  private renderSolarEclipse(alignment: number, elapsed: number, offsetDays: number): void {
     this.coronaMaterial.uniforms.uTime.value = elapsed;
     this.coronaMaterial.uniforms.uAlignment.value = alignment;
 
-    const moonOffset = (1 - alignment) * 4.0;
+    const direction = offsetDays >= 0 ? 1 : -1;
+    const moonOffset = (1 - alignment) * 5.0 * direction;
     this.solarMoonDisc.position.x = moonOffset;
 
     this.sceneBackground.lerpColors(SKY_BRIGHT, SKY_DARK, alignment);

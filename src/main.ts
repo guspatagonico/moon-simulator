@@ -36,6 +36,7 @@ const ORBITAL_CAMERA_POSITION = new THREE.Vector3(0, 40, 0.01);
 const SOLAR_ECLIPSE_CAMERA_POSITION = new THREE.Vector3(-8.5, 4.8, 17);
 const LUNAR_ECLIPSE_CAMERA_POSITION = new THREE.Vector3(13.5, 5.2, 18);
 const ORIGIN = new THREE.Vector3(0, 0, 0);
+const MOBILE_MEDIA_QUERY = '(max-width: 768px)';
 
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.copy(DEFAULT_CAMERA_POSITION);
@@ -172,8 +173,12 @@ const init = async (): Promise<void> => {
     }
 
     const currentState = simulationStore.get();
-    if (currentState.viewMode !== previousViewMode && currentState.viewMode === 'default') {
+    const viewModeChanged = currentState.viewMode !== previousViewMode;
+    if (viewModeChanged && currentState.viewMode === 'default') {
       returningToDefault = true;
+    }
+    if (viewModeChanged) {
+      previousViewMode = currentState.viewMode;
     }
 
     orbitalSystem.setDay(currentState.currentDay);
@@ -214,7 +219,8 @@ const init = async (): Promise<void> => {
       camera.lookAt(ORIGIN);
     } else if (currentState.viewMode === 'eclipse') {
       controls.enabled = false;
-      setCameraFov(42);
+      const eclipseFov = window.matchMedia(MOBILE_MEDIA_QUERY).matches ? 58 : 42;
+      setCameraFov(eclipseFov);
       if (currentState.eclipseType === 'solar') {
         eclipseCameraPosition.copy(SOLAR_ECLIPSE_CAMERA_POSITION);
         eclipseCameraTarget.copy(moonWorldPos).lerp(ORIGIN, 0.68);

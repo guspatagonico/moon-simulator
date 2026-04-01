@@ -40,6 +40,7 @@ export function createControls(): { gui: GUI; params: ControlParams } {
     simulationFolder.open();
     simulationFolder
       .add(params, 'day', 0, 29.53)
+      .step(0.1)
       .name(t('settings.day'))
       .listen()
       .onChange((value: number) => simulationStore.update({ currentDay: value }));
@@ -86,7 +87,7 @@ export function createControls(): { gui: GUI; params: ControlParams } {
   });
 
   simulationStore.subscribe((state) => {
-    params.day = state.currentDay;
+    params.day = Math.round(state.currentDay * 10) / 10;
     params.playing = state.isPlaying;
     params.speed = state.playSpeed;
     params.showOrbitLine = state.showOrbitLine;

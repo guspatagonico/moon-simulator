@@ -113,14 +113,14 @@ export class InfoPanel {
     this.element.innerHTML = `<div class="info-panel-header">
       <div class="info-panel-header-copy">
         <h2 class="phase-name">${emoji} ${phaseName}</h2>
-        <div class="info-panel-summary">${t('ui.illumination')} <span class="info-panel-summary-value">${info.illumination.toFixed(1)}%</span> · ${t('ui.day')} ${info.day.toFixed(1)}</div>
+        <div class="info-panel-summary">${t('ui.illumination')} <span class="info-panel-summary-value">${Math.round(info.illumination)}%</span> · ${t('ui.day')} ${info.day.toFixed(1)}</div>
       </div>
       <button class="info-panel-toggle" type="button"></button>
     </div>
     <div class="info-panel-details">
       <div class="stat-row">
         <span class="stat-label">${t('ui.illumination')}</span>
-        <span class="illumination-value">${info.illumination.toFixed(1)}%</span>
+        <span class="illumination-value">${Math.round(info.illumination)}%</span>
       </div>
       <div class="stat-row">
         <span class="stat-label">${t('ui.day')}</span>
@@ -152,7 +152,7 @@ export class InfoPanel {
     this.element.innerHTML = `<div class="info-panel-header">
       <div class="info-panel-header-copy">
         <h2 class="phase-name">${emoji} ${eclipseTitle}</h2>
-        <div class="info-panel-summary">${t('eclipse.alignmentWindow')} <span class="info-panel-summary-value">${eclipseInfo.alignmentWindowPercent.toFixed(0)}%</span> · ${t('ui.day')} ${state.currentDay.toFixed(1)}</div>
+        <div class="info-panel-summary">${t('eclipse.alignmentWindow')} <span class="info-panel-summary-value">${eclipseInfo.alignmentWindowPercent.toFixed(0)}%</span></div>
       </div>
       <button class="info-panel-toggle" type="button"></button>
     </div>
@@ -174,10 +174,6 @@ export class InfoPanel {
         <span class="stat-value">${t(eclipseInfo.lineupKey)}</span>
       </div>
       <div class="stat-row">
-        <span class="stat-label">${t('ui.day')}</span>
-        <span class="stat-value eclipse-day-value">${state.currentDay.toFixed(1)} / 29.5</span>
-      </div>
-      <div class="stat-row">
         <span class="stat-label">${t('ui.phaseAngle')}</span>
         <span class="stat-value eclipse-angle-value">${eclipseInfo.phaseAngle.toFixed(1)}${t('ui.deg')}</span>
       </div>
@@ -194,7 +190,7 @@ export class InfoPanel {
 
     this.summaryValue = this.element.querySelector('.info-panel-summary-value');
     this.illuminationValue = null;
-    this.dayValue = this.element.querySelector('.eclipse-day-value');
+    this.dayValue = null;
     this.angleValue = this.element.querySelector('.eclipse-angle-value');
     this.alignmentValue = this.element.querySelector('.eclipse-alignment-value');
     this.bindToggleButton();
@@ -238,10 +234,10 @@ export class InfoPanel {
     }
 
     if (this.summaryValue) {
-      this.summaryValue.textContent = `${phaseInfo.illumination.toFixed(1)}%`;
+      this.summaryValue.textContent = `${Math.round(phaseInfo.illumination)}%`;
     }
     if (this.illuminationValue) {
-      this.illuminationValue.textContent = `${phaseInfo.illumination.toFixed(1)}%`;
+      this.illuminationValue.textContent = `${Math.round(phaseInfo.illumination)}%`;
     }
     if (this.dayValue) {
       this.dayValue.textContent = `${phaseInfo.day.toFixed(1)} / 29.5`;
