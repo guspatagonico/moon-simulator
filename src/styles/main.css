@@ -184,6 +184,7 @@ body {
   font-weight: 700;
   color: #fff;
   margin-bottom: 14px;
+  white-space: nowrap;
 }
 
 .illumination-value {
