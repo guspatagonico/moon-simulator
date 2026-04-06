@@ -51,6 +51,22 @@ handoff*.md
 opencode.jsonc
 opencode.json 
 
+# Shared AI workspace
+.brv/config.json
+.brv/context-tree/.snapshot.json
+.brv/context-tree/_manifest.json
+
+.opencode/node_modules/
+.opencode/.env
+.opencode/.env.*
+!.opencode/.env.example
+!.opencode/.env*.example
+.opencode/**/*.local
+.opencode/**/auth*
+.opencode/**/credentials*
+.opencode/**/secrets*
+.opencode/**/token*
+
 # Optional local databases
 *.sqlite
 *.db
