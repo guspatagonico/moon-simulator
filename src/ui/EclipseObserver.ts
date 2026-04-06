@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { simulationStore } from '../main';
 import { getEclipseInfo } from '../simulation/Eclipse';
 import { createCoronaMaterial, type CoronaMaterial } from '../scene/CoronaShader';
+import { MOON_TEXTURE_URL } from '../scene/Moon';
 import { i18n, t } from '../i18n/i18n';
 
 const OBSERVER_SIZE = 200;
@@ -24,13 +25,15 @@ export class EclipseObserver {
   private sunDisc: THREE.Mesh;
   private solarMoonDisc: THREE.Mesh;
   private lunarMoonDisc: THREE.Mesh;
-  private lunarMoonMaterial: THREE.MeshBasicMaterial;
+  private lunarMoonMaterial: THREE.MeshStandardMaterial;
   private lunarGlowDisc: THREE.Mesh;
   private lunarGlowMaterial: THREE.MeshBasicMaterial;
+  private lunarMoonLight: THREE.DirectionalLight;
   private starsMaterial: THREE.PointsMaterial;
   private clock: THREE.Clock;
   private animationId: number | null = null;
   private isVisible = false;
+  private lunarTextureLoaded = false;
   private sceneBackground = new THREE.Color();
 
   constructor() {
@@ -61,6 +64,13 @@ export class EclipseObserver {
 
     this.scene = new THREE.Scene();
     this.scene.background = SKY_DARK.clone();
+
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    this.scene.add(ambientLight);
+
+    this.lunarMoonLight = new THREE.DirectionalLight(0xfff1df, 1.15);
+    this.lunarMoonLight.position.set(-2.4, 1.8, 3.2);
+    this.scene.add(this.lunarMoonLight);
 
     this.clock = new THREE.Clock(false);
 
@@ -101,12 +111,18 @@ export class EclipseObserver {
     this.lunarGlowDisc.position.z = -0.02;
     this.scene.add(this.lunarGlowDisc);
 
-    this.lunarMoonMaterial = new THREE.MeshBasicMaterial({ color: 0xaaaaaa });
+    this.lunarMoonMaterial = new THREE.MeshStandardMaterial({
+      color: 0xb5b5b5,
+      roughness: 0.96,
+      metalness: 0,
+    });
     this.lunarMoonDisc = new THREE.Mesh(
-      new THREE.CircleGeometry(1.4, 64),
+      new THREE.SphereGeometry(1.34, 48, 48),
       this.lunarMoonMaterial,
     );
     this.lunarMoonDisc.position.z = -0.01;
+    this.lunarMoonDisc.rotation.x = THREE.MathUtils.degToRad(8);
+    this.lunarMoonDisc.rotation.y = THREE.MathUtils.degToRad(140);
     this.scene.add(this.lunarMoonDisc);
 
     this.starsMaterial = stars.material as THREE.PointsMaterial;
@@ -151,8 +167,25 @@ export class EclipseObserver {
   private show(): void {
     this.isVisible = true;
     this.container.classList.add('visible');
+    void this.loadLunarMoonTexture();
     this.clock.start();
     this.startLoop();
+  }
+
+  private async loadLunarMoonTexture(): Promise<void> {
+    if (this.lunarTextureLoaded) {
+      return;
+    }
+
+    const textureLoader = new THREE.TextureLoader();
+
+    try {
+      const texture = await textureLoader.loadAsync(MOON_TEXTURE_URL);
+      texture.colorSpace = THREE.SRGBColorSpace;
+      this.lunarMoonMaterial.map = texture;
+      this.lunarMoonMaterial.needsUpdate = true;
+      this.lunarTextureLoaded = true;
+    } catch { }
   }
 
   private hide(): void {
@@ -222,6 +255,11 @@ export class EclipseObserver {
   private renderLunarEclipse(alignment: number): void {
     const moonColor = MOON_NORMAL_COLOR.clone().lerp(MOON_BLOOD_COLOR, alignment);
     this.lunarMoonMaterial.color.copy(moonColor);
+    this.lunarMoonMaterial.emissive.setRGB(
+      THREE.MathUtils.lerp(0, 0.22, alignment),
+      THREE.MathUtils.lerp(0, 0.04, alignment),
+      THREE.MathUtils.lerp(0, 0.02, alignment),
+    );
 
     this.lunarGlowMaterial.opacity = alignment * 0.25;
     const glowColor = new THREE.Color(0.4, 0.06, 0.03);

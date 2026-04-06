@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-const MOON_TEXTURE_URL =
+export const MOON_TEXTURE_URL =
   'https://threejs.org/examples/textures/planets/moon_1024.jpg';
 
 export async function createMoon(scene: THREE.Scene): Promise<THREE.Mesh> {
